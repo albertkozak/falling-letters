@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="container">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Falling Letter Game</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Oswald|Teko&display=swap" rel="stylesheet">
+
+   <h1>FALLING LETTER GAME</h1>
+    <script>
+        score = 0;
+        var seconds = 60;
+        var gameOver = false;
+
+        function countDown() {
+            if (seconds > 0) {
+                seconds -= 1;
+                document.getElementById('seconds').innerHTML = 'Time Left: ' + seconds;
+            } else {
+                if (!gameOver){
+                       alert('Game over! You finished with a score of: ' + score + ' points' + '\n\nClick "OK" to try again :)');
+                }
+                gameOver = true;
+                location.reload();
+            }
+        }
+
+        function createGameBox() {
+            var seconds = document.createElement('p');
+            seconds.id = 'seconds';
+            seconds.style.height = '50px'
+            document.body.append(seconds);
+            
+            var div = document.createElement('div');
+            div.className = 'gameBox';
+            div.id = 'gameBoxDiv';
+            div.style.position = 'relative';
+            div.style.border = '1px solid black';
+            div.style.height = '500px';
+            div.style.width = '500px';
+            document.body.appendChild(div);
+
+            var scoreParagraph = document.createElement('p');
+            scoreParagraph.id = 'score';
+            scoreParagraph.style.height = '50px'
+            document.body.appendChild(scoreParagraph);
+
+            document.getElementById('score').innerHTML = 'Score: ' + score;
+
+
+        }
+        onload = function () {
+            createGameBox();
+            setInterval(countDown, 1000);
+            for (let i = 1; i <= 6; i++) {
+                addLetter();
+            }
+        }
+
+        function addLetter() {
+            var letterCode = Math.floor(Math.random() * 26) + 65;
+            var img = document.createElement('img');
+            img.id = String.fromCharCode(letterCode);
+            // alert(img.id);
+            img.src = 'images/letters/' + String.fromCharCode(letterCode) + '.png';
+            img.className = 'gamePiece';
+            img.style.position = 'absolute';
+            img.style.top = 0;
+            img.onclick = click;
+            var width = (Math.floor(Math.random() * 50) + 10);
+            var left = Math.floor((Math.random() * 500) + 1);
+            if (left > width) {
+                left = left - width;
+            }
+            img.style.left = left + 'px';
+            img.style.width = width + 'px';
+            img.style.height = width + 'px';
+
+            // alert(document.getElementsByClassName('gamePiece').length);
+            if (document.getElementsByClassName('gamePiece').length < 5) {
+                document.getElementById('gameBoxDiv').appendChild(img);
+                moveImage(img);
+            }
+
+
+        }
+
+        function moveImage(img) {
+            var speed = (Math.floor(Math.random() * 20) + 10);
+            var interval = setInterval(function () {
+                img.style.top = (parseInt(img.style.top) + 1) + 'px';
+                if (parseInt(img.style.top) == 500 - parseInt(img.style.height)) {
+                    img.remove();//.style.display = 'none';
+                    addLetter();
+                }
+            }, speed);
+        }
+
+        function click() {
+            // this.style.display = 'none';
+
+            if (this.width < 15) {
+                score += 10000;
+            }
+            else if (this.width < 40) {
+                score += 5000;
+            }
+            else {
+                score += 2000;
+            }
+            this.remove();
+            addLetter();
+            document.getElementById('score').innerHTML = 'Score: ' + score;
+        }
+        function handleKeyPress(evt) {
+            var keycode = evt.which;
+            if (evt.which >= 65 && evt.which <= 90) {
+                // keycode += 32
+                selectedLetter = String.fromCharCode(keycode);
+                // alert(selectedLetter);
+                document.getElementById(selectedLetter).remove();
+                score += 1;
+                document.getElementById('score').innerHTML = 'Score: ' + score;
+                addLetter();
+            }
+        }
+        onkeydown = handleKeyPress
+    </script>
+    </div>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<html><head><script>
+selectedLetter = 'a'
+
+function makeDivs(){
+	var div1 = document.createElement('div')
+	div1.style.minHeight='120px'
+	div1.id = 'd1'
+	div1.style.backgroundColor='pink'
+	document.body.appendChild(div1)
+	
+	var div2 = document.createElement('div')
+	div2.style.minHeight='120px'
+	div2.id = 'd2'
+	div2.style.backgroundColor='cyan'
+	document.body.appendChild(div2)
+	
+	var div3 = document.createElement('div')
+	div3.style.minHeight='120px'
+	div3.id = 'd3'
+	div3.style.backgroundColor='silver'
+	document.body.appendChild(div3)	
+	
+}
+
+function makeImages(){
+	for(let i = 'a'.charCodeAt(0); i <= 'z'.charCodeAt(0); i++){
+		var letter = String.fromCharCode(i)
+		//console.log(letter)
+		
+		var im     = document.createElement('img')
+		im.src     = 'images/letters/' + letter + '.png'
+		im.id      = letter
+		im.title   = letter
+		im.alt     = letter
+		im.height  = 100
+		im.onclick = move
+		
+		document.getElementsByTagName('div')[0].appendChild(im)
+	}
+}
+
+function move(){
+	var firstDiv = document.getElementsByTagName('div')[0]
+
+	if(this.nextSibling != null){
+		this.parentNode.insertBefore(this.nextSibling, this)
+	}else if(this.parentNode.nextSibling != null){
+		this.parentNode.nextSibling.appendChild(this)
+	}else{
+		firstDiv.insertBefore(this, firstDiv.firstChild)
+	}
+}
+
+
+function moveLetterRight(){
+
+	var letterToMove = document.getElementById(selectedLetter)
+
+	var firstDiv = document.getElementsByTagName('div')[0]
+
+	if(letterToMove.nextSibling != null){
+		letterToMove.parentNode.insertBefore(letterToMove.nextSibling, letterToMove)
+	}else if(letterToMove.parentNode.nextSibling != null){
+		letterToMove.parentNode.nextSibling.appendChild(letterToMove)
+	}else{
+		firstDiv.insertBefore(letterToMove, firstDiv.firstChild)
+	}
+}
+
+function moveLetterLeft(){
+
+	var letterToMove = document.getElementById(selectedLetter)
+
+	var firstDiv = document.getElementsByTagName('div')[0]
+
+	if(letterToMove.previousSibling != null){
+		letterToMove.parentNode.insertBefore(letterToMove, letterToMove.previousSibling)
+	}else if(letterToMove.previousSibling == null && 
+	         letterToMove.parentNode.previousSibling == null){
+		// the top-left-most image now moves to be the last image of the last div
+		document.getElementsByTagName('div')[
+			document.getElementsByTagName('div').length-1].appendChild(letterToMove)
+	}else{
+		// this is the first image in the non-first div
+		// move this image to the end of the previous div
+		letterToMove.parentNode.previousSibling.appendChild(letterToMove)
+	}
+}
+
+onload = function(){
+	makeDivs()
+	makeImages()
+}
+
+function handleKeyPress(evt){
+	//alert(evt.which)
+	
+	var keycode = evt.which
+	
+	if(evt.which >= 65 && evt.which <= 90){	
+		keycode += 32
+		selectedLetter = String.fromCharCode(keycode)
+	}else if(evt.which == 39){
+		moveLetterRight()
+	}else if(evt.which == 37){
+		moveLetterLeft()
+	}
+}
+
+onkeydown=handleKeyPress
+
+</script></head><body></body></html>

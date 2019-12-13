@@ -1,0 +1,22 @@
+html {
+  background-color: rgba(132, 223, 132, 0.75);
+  font-size: 1.25rem;
+  font-family: "Oswald", sans-serif;
+  color: #ffffff;
+  text-align: center;
+}
+
+h1 {
+  font-family: "Teko", sans-serif;
+  font-size: 3rem;
+  margin: 0 auto;
+}
+
+.gameBox {
+  margin: 0 auto;
+  border: 1px solid white;
+}
+
+#seconds {
+  margin: 0 auto;
+}
